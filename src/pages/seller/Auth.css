@@ -1,0 +1,119 @@
+/* src/pages/seller/Auth.css */
+
+/* Variabel Warna Brand GeraiKita */
+:root {
+  --primary-green: #28a745;
+  --dark-text: #333;
+  --light-text: #666;
+  --border-color: #ddd;
+  --background-color: #fff;
+}
+
+.auth-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 30px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif; /* Ganti font jika perlu */
+  background-color: var(--background-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.auth-header {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+.auth-subheader {
+  color: var(--light-text);
+  margin-bottom: 25px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-input {
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  font-size: 16px;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+.auth-button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-green);
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.auth-button:hover {
+  background-color: #218838; /* Warna hijau sedikit lebih gelap saat hover */
+}
+
+.auth-button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.auth-footer-text {
+  margin-top: 20px;
+  color: var(--light-text);
+}
+
+.auth-link {
+  color: var(--primary-green);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* Tambahkan ini di src/pages/seller/Auth.css */
+
+.password-wrapper {
+  position: relative;
+  display: flex; 
+  align-items: center; 
+  margin-bottom: 15px; 
+}
+
+.password-wrapper .auth-input {
+  width: 100%;
+  padding-right: 40px; 
+  margin-bottom: 0; 
+}
+
+.password-icon {
+  position: absolute;
+  right: 15px; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  cursor: pointer;
+  color: var(--light-text); 
+  width: 20px;
+  height: 20px;
+  z-index: 10; 
+}
+
+.password-icon:hover {
+    color: var(--primary-green);
+}

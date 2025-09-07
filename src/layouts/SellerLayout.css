@@ -1,0 +1,17 @@
+/* src/layouts/SellerLayout.css */
+.seller-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.seller-content {
+  flex-grow: 1;
+  padding: 20px;
+  padding-bottom: 80px; /* Beri ruang agar tidak tertutup bottom nav */
+}
+
+@media (min-width: 768px) {
+  .seller-content {
+    padding-bottom: 20px; /* Kembalikan padding normal di desktop */
+  }
+}

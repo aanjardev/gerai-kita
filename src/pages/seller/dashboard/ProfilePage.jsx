@@ -1,20 +1,25 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { supabase } from "../../supabaseClient";
+import { supabase } from "../../../supabaseClient";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import "./CompleteProfilePage.css"; // Import CSS baru
-import "./Auth.css"; // Kita masih pakai beberapa style dari Auth.css
+import "../CompleteProfilePage.css";
+import "../Auth.css";
 
-// Komponen untuk peta, tidak perlu diubah
+// Komponen Peta yang sudah diperbaiki
 function DraggableMarker({ onPositionChange, initialPosition }) {
   const [position, setPosition] = useState(initialPosition);
   const markerRef = useRef(null);
 
+  useEffect(() => {
+    setPosition(initialPosition);
+  }, [initialPosition]);
+
   const map = useMapEvents({
     click(e) {
-      setPosition(e.latlng);
-      onPositionChange(e.latlng);
-      map.flyTo(e.latlng, map.getZoom());
+      const newPos = e.latlng;
+      setPosition(newPos);
+      onPositionChange(newPos);
+      map.flyTo(newPos, map.getZoom());
     },
   });
 
@@ -42,65 +47,96 @@ function DraggableMarker({ onPositionChange, initialPosition }) {
   );
 }
 
-function CompleteProfilePage() {
+function ProfilePage() {
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
   const [storeName, setStoreName] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [description, setDescription] = useState("");
+  const [logoUrl, setLogoUrl] = useState("");
   const [logoFile, setLogoFile] = useState(null);
   const [logoFileName, setLogoFileName] = useState("");
   const [location, setLocation] = useState({ lat: -7.983908, lng: 112.621391 });
 
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchProfile = async () => {
+      setLoading(true);
       const {
         data: { session },
       } = await supabase.auth.getSession();
       if (session?.user) {
         setUser(session.user);
+        const { data: profile, error } = await supabase
+          .from("sellers")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+        if (error) {
+          console.error("Error fetching profile:", error);
+        } else if (profile) {
+          setStoreName(profile.store_name || "");
+          setWhatsappNumber(profile.whatsapp_number || "");
+          setDescription(profile.description || "");
+          setLogoUrl(profile.logo_url || "");
+          if (profile.location && typeof profile.location === "string") {
+            try {
+              const cleanedPoint = profile.location
+                .replace("POINT(", "")
+                .replace(")", "");
+              const [lngStr, latStr] = cleanedPoint.split(" ");
+              if (latStr && lngStr) {
+                const lat = parseFloat(latStr);
+                const lng = parseFloat(lngStr);
+                if (!isNaN(lat) && !isNaN(lng)) {
+                  setLocation({ lat, lng });
+                }
+              }
+            } catch (e) {
+              console.error("Failed to parse location, using default.", e);
+            }
+          }
+        }
       } else {
         navigate("/login");
       }
+      setLoading(false);
     };
-    fetchUser();
+    fetchProfile();
   }, [navigate]);
 
   const handleLogoChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setLogoFile(e.target.files[0]);
       setLogoFileName(e.target.files[0].name);
+      setLogoUrl(URL.createObjectURL(e.target.files[0]));
     }
   };
 
   const handleProfileUpdate = async (event) => {
     event.preventDefault();
     setLoading(true);
-
-    if (!user) {
-      alert("Sesi tidak ditemukan, silakan login kembali.");
-      setLoading(false);
-      return;
-    }
-
     try {
-      let logoUrl = null;
+      let newLogoUrl = logoUrl;
+      // Jika ada file logo baru yang dipilih, proses upload
       if (logoFile) {
+        // Hapus URL objek blob lokal sebelum mengupload
+        if (newLogoUrl.startsWith("blob:")) {
+          newLogoUrl = "";
+        }
         const fileExt = logoFile.name.split(".").pop();
         const fileName = `${user.id}-${Date.now()}.${fileExt}`;
         const filePath = `logos/${fileName}`;
-
         const { error: uploadError } = await supabase.storage
           .from("store-assets")
-          .upload(filePath, logoFile);
+          .upload(filePath, logoFile, { upsert: true });
         if (uploadError) throw uploadError;
-
         const { data: publicURLData } = supabase.storage
           .from("store-assets")
           .getPublicUrl(filePath);
-        logoUrl = publicURLData.publicUrl;
+        newLogoUrl = publicURLData.publicUrl;
       }
 
       const locationPoint = `POINT(${location.lng} ${location.lat})`;
@@ -109,7 +145,7 @@ function CompleteProfilePage() {
         whatsapp_number: whatsappNumber,
         description: description,
         location: locationPoint,
-        ...(logoUrl && { logo_url: logoUrl }),
+        logo_url: newLogoUrl,
       };
 
       const { error } = await supabase
@@ -117,9 +153,7 @@ function CompleteProfilePage() {
         .update(updates)
         .eq("id", user.id);
       if (error) throw error;
-
-      alert("Profil berhasil disimpan!");
-      navigate("/dashboard");
+      alert("Profil berhasil diperbarui!");
     } catch (error) {
       alert("Error: " + error.message);
     } finally {
@@ -127,19 +161,21 @@ function CompleteProfilePage() {
     }
   };
 
+  if (loading) {
+    return <div>Memuat data profil...</div>;
+  }
+
   return (
     <div className="profile-container">
       <div className="profile-header">
-        <h1 className="auth-header">Lengkapi Profil Toko Anda</h1>
+        <h1 className="auth-header">Pengaturan Profil Toko</h1>
         <p className="profile-subheader">
-          Satu langkah lagi untuk mulai berjualan. Informasi ini akan
-          ditampilkan kepada pelanggan.
+          Perbarui informasi tokomu yang akan dilihat oleh pelanggan.
         </p>
       </div>
-
       <form onSubmit={handleProfileUpdate}>
         <div className="profile-grid">
-          {/* Kolom Kiri: Input Teks */}
+          {/* Kolom Kiri: Input Teks (SUDAH DIPERBAIKI) */}
           <div className="form-section">
             <div className="input-group">
               <label htmlFor="storeName">Nama Toko / Gerai Anda</label>
@@ -176,13 +212,27 @@ function CompleteProfilePage() {
               />
             </div>
           </div>
-
           {/* Kolom Kanan: Logo dan Peta */}
           <div className="form-section">
             <div className="input-group">
-              <label>Logo Toko (Opsional)</label>
+              <label>Logo Toko</label>
+              {logoUrl && (
+                <img
+                  src={logoUrl}
+                  alt="Logo Preview"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "8px",
+                    objectFit: "cover",
+                    marginBottom: "10px",
+                  }}
+                />
+              )}
               <label htmlFor="logoInput" className="file-input-wrapper">
-                <span className="file-input-button">Pilih File</span>
+                <span className="file-input-button">
+                  {logoUrl ? "Ganti Logo" : "Pilih File"}
+                </span>
                 <input
                   id="logoInput"
                   type="file"
@@ -191,25 +241,11 @@ function CompleteProfilePage() {
                 />
               </label>
               {logoFileName && <p className="file-name">{logoFileName}</p>}
-              <Link
-                to="/jasa-desain"
-                className="auth-link"
-                style={{
-                  fontSize: "14px",
-                  textAlign: "left",
-                  marginTop: "5px",
-                }}
-              >
-                Butuh bantuan? Pesan logomu di sini!
-              </Link>
             </div>
-
             <div className="input-group">
               <label>Tentukan Lokasi Toko</label>
-              <p className="map-label-helper">
-                Klik atau geser pin ke lokasi gerai Anda.
-              </p>
               <MapContainer
+                key={JSON.stringify(location)}
                 center={[location.lat, location.lng]}
                 zoom={13}
                 style={{
@@ -227,7 +263,6 @@ function CompleteProfilePage() {
               </MapContainer>
             </div>
           </div>
-
           <div className="submit-button-container">
             <button
               className="auth-button"
@@ -235,7 +270,7 @@ function CompleteProfilePage() {
               disabled={loading}
               style={{ width: "100%", maxWidth: "300px" }}
             >
-              {loading ? "Menyimpan..." : "Simpan Profil & Lanjutkan"}
+              {loading ? "Menyimpan..." : "Simpan Perubahan"}
             </button>
           </div>
         </div>
@@ -244,6 +279,4 @@ function CompleteProfilePage() {
   );
 }
 
-export default CompleteProfilePage;
-
-//failed to resolve import ".CompleteProfilePage.css" from "src\pages\seller\CompleteProfilePage.jsx". Does the file exist?
+export default ProfilePage;

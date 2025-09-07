@@ -1,0 +1,90 @@
+/* src/pages/seller/dashboard/Dashboard.css */
+
+.dashboard-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.dashboard-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+}
+
+.dashboard-welcome {
+  grid-column: 1 / -1; /* Membuat kartu ini mengambil lebar penuh */
+  background-color: var(--primary-green);
+  color: white;
+  border: none;
+}
+
+.welcome-text {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.stat-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: var(--light-text);
+  font-weight: 500;
+}
+
+.stat-card .stat-number {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--dark-text);
+}
+
+.quick-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.action-button {
+  flex-grow: 1;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--primary-green);
+  background-color: #e9f7ec;
+  border: 1px solid var(--primary-green);
+  border-radius: 8px;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.action-button:hover {
+  background-color: #d4f0db;
+}
+
+.recent-products-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-products-list li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+.recent-products-list li:last-child {
+  border-bottom: none;
+}
+
+.product-list-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}

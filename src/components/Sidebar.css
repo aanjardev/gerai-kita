@@ -1,0 +1,66 @@
+/* src/components/Sidebar.css */
+.sidebar {
+  display: none; /* Sembunyi di mobile */
+  background-color: #f8f9fa;
+  border-right: 1px solid #e0e0e0;
+  width: 240px;
+  padding: 20px;
+  flex-shrink: 0;
+  flex-direction: column;
+}
+
+.sidebar-brand {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: var(--primary-green, #28a745);
+  text-align: center;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+/* --- PERUBAHAN DI SINI --- */
+.sidebar-nav a {
+  display: flex; /* Menggunakan flexbox untuk alignment */
+  align-items: center; /* Membuat ikon dan teks sejajar di tengah */
+  gap: 12px; /* Memberi jarak antara ikon dan teks */
+  text-decoration: none;
+  color: #333;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.sidebar-nav a svg {
+  width: 22px; /* Ukuran ikon di sidebar */
+  height: 22px;
+  flex-shrink: 0; /* Mencegah ikon menyusut */
+}
+/* --- AKHIR PERUBAHAN --- */
+
+.sidebar-nav a.active {
+  background-color: var(--primary-green, #28a745);
+  color: white;
+}
+
+.sidebar-logout {
+  margin-top: auto;
+  padding: 10px 15px;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  background-color: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    display: flex;
+  }
+}

@@ -10,8 +10,13 @@ import HomePage from "./pages/customer/HomePage";
 import ProductDetailPage from "./pages/customer/ProductDetailPage";
 import LoginPage from "./pages/seller/LoginPage";
 import RegisterPage from "./pages/seller/RegisterPage";
-import DashboardPage from "./pages/seller/DashboardPage";
+import DashboardHomePage from "./pages/seller/dashboard/DashboardHomePage";
+import ProfilePage from "./pages/seller/dashboard/ProfilePage";
 import CompleteProfilePage from './pages/seller/CompleteProfilePage'; 
+import ProductsPage from "./pages/seller/dashboard/ProductsPage";
+import CreateProductPage from "./pages/seller/dashboard/CreateProductPage";
+import PromotionsPage from "./pages/seller/dashboard/PromotionsPage";
+import AnalyticsPage from "./pages/seller/dashboard/AnalyticsPage";
 
 
 function App() {
@@ -43,26 +48,18 @@ function App() {
         />
       </Route>
 
-      {/* Grup Rute dengan Layout SELLER (Dashboard) */}
       <Route element={<SellerLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
+        {/* Rute utama dashboard sekarang mengarah ke DashboardHomePage */}
+        <Route path="/dashboard" element={<DashboardHomePage />} />
+
+        {/* Rute profil mengarah ke ProfilePage */}
+        <Route path="/dashboard/profil" element={<ProfilePage />} />
+
         <Route path="/melengkapi-profil" element={<CompleteProfilePage />} />
-        <Route
-          path="/dashboard/produk"
-          element={
-            <div>
-              <h1>Halaman Kelola Produk</h1>
-            </div>
-          }
-        />
-        <Route
-          path="/dashboard/profil"
-          element={
-            <div>
-              <h1>Halaman Kelola Profil Toko</h1>
-            </div>
-          }
-        />
+        <Route path="/dashboard/produk" element={<ProductsPage />} />
+        <Route path="/dashboard/produk/baru" element={<CreateProductPage />} />
+        <Route path="/dashboard/promosi" element={<PromotionsPage />} />
+        <Route path="/dashboard/analitik" element={<AnalyticsPage />} />
       </Route>
     </Routes>
   );

@@ -1,0 +1,40 @@
+/* src/pages/seller/dashboard/AnalyticsPage.css */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+}
+
+.stat-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.stat-card .stat-number {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+}
+
+.chart-placeholder {
+  grid-column: 1 / -1; /* Mengambil lebar penuh */
+  height: 300px;
+  background-color: #f8f9fa;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #888;
+}

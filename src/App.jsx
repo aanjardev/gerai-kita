@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 // Import Layouts
 import CustomerLayout from "./layouts/CustomerLayout";
@@ -21,6 +22,8 @@ import AnalyticsPage from "./pages/seller/dashboard/AnalyticsPage";
 
 function App() {
   return (
+    <div>
+      <Toaster position="top-right" reverseOrder={false} />
     <Routes>
       {/* Rute TANPA Layout (Login & Register) */}
       <Route path="/login" element={<LoginPage />} />
@@ -62,6 +65,7 @@ function App() {
         <Route path="/dashboard/analitik" element={<AnalyticsPage />} />
       </Route>
     </Routes>
+    </div>
   );
 }
 

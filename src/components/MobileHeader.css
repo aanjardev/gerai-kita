@@ -1,0 +1,29 @@
+/* src/components/MobileHeader.css */
+.mobile-header {
+  display: flex; /* Defaultnya flex agar bisa kita atur */
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 60px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  
+  position: fixed; /* Menempel di atas */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.mobile-header-brand {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-green, #28a745);
+}
+
+/* SANGAT PENTING: Sembunyikan header ini di layar besar (desktop) */
+@media (min-width: 768px) {
+  .mobile-header {
+    display: none;
+  }
+}

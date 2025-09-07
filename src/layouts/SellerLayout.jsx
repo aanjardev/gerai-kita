@@ -1,17 +1,19 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import BottomNavBar from "../components/BottomNavBar"; // Import menu bawah
-import Sidebar from "../components/Sidebar"; // Import sidebar
-import "./SellerLayout.css"; // CSS untuk layout utama
+import BottomNavBar from "../components/BottomNavBar";
+import Sidebar from "../components/Sidebar";
+import MobileHeader from "../components/MobileHeader"; 
+import "./SellerLayout.css";
 
 function SellerLayout() {
   return (
     <div className="seller-layout">
-      <Sidebar /> {/* Sidebar untuk Desktop */}
+      <Sidebar />
+      <MobileHeader /> {/* <-- 2. TAMBAHKAN DI SINI */}
       <div className="seller-content">
-        <Outlet /> {/* Konten halaman akan dirender di sini */}
+        <Outlet />
       </div>
-      <BottomNavBar /> {/* Menu Bawah untuk Mobile */}
+      <BottomNavBar />
     </div>
   );
 }

@@ -165,116 +165,142 @@ function ProfilePage() {
     return <div>Memuat data profil...</div>;
   }
 
+  const handleLogout = async () => {
+    if (window.confirm("Apakah kamu yakin ingin keluar?")) {
+      await supabase.auth.signOut();
+      navigate("/"); // Arahkan ke homepage customer setelah logout
+    }
+  };
+  if (loading) {
+    return <div>Memuat data profil...</div>;
+  }
+
   return (
-    <div className="profile-container">
+    <div>
       <div className="profile-header">
-        <h1 className="auth-header">Pengaturan Profil Toko</h1>
-        <p className="profile-subheader">
+        <h1
+          className="auth-header"
+          style={{ textAlign: "left", marginBottom: "10px" }}
+        >
+          Pengaturan Profil Toko
+        </h1>
+        <p
+          className="profile-subheader"
+          style={{ textAlign: "left", marginTop: "0" }}
+        >
           Perbarui informasi tokomu yang akan dilihat oleh pelanggan.
         </p>
       </div>
-      <form onSubmit={handleProfileUpdate}>
-        <div className="profile-grid">
-          {/* Kolom Kiri: Input Teks (SUDAH DIPERBAIKI) */}
-          <div className="form-section">
-            <div className="input-group">
-              <label htmlFor="storeName">Nama Toko / Gerai Anda</label>
-              <input
-                id="storeName"
-                className="auth-input"
-                type="text"
-                value={storeName}
-                onChange={(e) => setStoreName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="whatsapp">Nomor WhatsApp</label>
-              <input
-                id="whatsapp"
-                className="auth-input"
-                type="tel"
-                placeholder="Contoh: 628123456789"
-                value={whatsappNumber}
-                onChange={(e) => setWhatsappNumber(e.target.value)}
-                required
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="description">Deskripsi Toko</label>
-              <textarea
-                id="description"
-                className="auth-input"
-                placeholder="Deskripsi singkat tentang toko Anda"
-                rows="5"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-          </div>
-          {/* Kolom Kanan: Logo dan Peta */}
-          <div className="form-section">
-            <div className="input-group">
-              <label>Logo Toko</label>
-              {logoUrl && (
-                <img
-                  src={logoUrl}
-                  alt="Logo Preview"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "8px",
-                    objectFit: "cover",
-                    marginBottom: "10px",
-                  }}
-                />
-              )}
-              <label htmlFor="logoInput" className="file-input-wrapper">
-                <span className="file-input-button">
-                  {logoUrl ? "Ganti Logo" : "Pilih File"}
-                </span>
+
+      <div className="profile-container" style={{ margin: "20px 0" }}>
+        <form onSubmit={handleProfileUpdate}>
+          <div className="profile-grid">
+            {/* Kolom Kiri: Input Teks (SUDAH DIPERBAIKI) */}
+            <div className="form-section">
+              <div className="input-group">
+                <label htmlFor="storeName">Nama Toko / Gerai Anda</label>
                 <input
-                  id="logoInput"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoChange}
+                  id="storeName"
+                  className="auth-input"
+                  type="text"
+                  value={storeName}
+                  onChange={(e) => setStoreName(e.target.value)}
+                  required
                 />
-              </label>
-              {logoFileName && <p className="file-name">{logoFileName}</p>}
+              </div>
+              <div className="input-group">
+                <label htmlFor="whatsapp">Nomor WhatsApp</label>
+                <input
+                  id="whatsapp"
+                  className="auth-input"
+                  type="tel"
+                  placeholder="Contoh: 628123456789"
+                  value={whatsappNumber}
+                  onChange={(e) => setWhatsappNumber(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <label htmlFor="description">Deskripsi Toko</label>
+                <textarea
+                  id="description"
+                  className="auth-input"
+                  placeholder="Deskripsi singkat tentang toko Anda"
+                  rows="5"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
             </div>
-            <div className="input-group">
-              <label>Tentukan Lokasi Toko</label>
-              <MapContainer
-                key={JSON.stringify(location)}
-                center={[location.lat, location.lng]}
-                zoom={13}
-                style={{
-                  height: "250px",
-                  width: "100%",
-                  borderRadius: "8px",
-                  zIndex: 0,
-                }}
+            {/* Kolom Kanan: Logo dan Peta */}
+            <div className="form-section">
+              <div className="input-group">
+                <label>Logo Toko</label>
+                {logoUrl && (
+                  <img
+                    src={logoUrl}
+                    alt="Logo Preview"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "8px",
+                      objectFit: "cover",
+                      marginBottom: "10px",
+                    }}
+                  />
+                )}
+                <label htmlFor="logoInput" className="file-input-wrapper">
+                  <span className="file-input-button">
+                    {logoUrl ? "Ganti Logo" : "Pilih File"}
+                  </span>
+                  <input
+                    id="logoInput"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoChange}
+                  />
+                </label>
+                {logoFileName && <p className="file-name">{logoFileName}</p>}
+              </div>
+              <div className="input-group">
+                <label>Tentukan Lokasi Toko</label>
+                <MapContainer
+                  key={JSON.stringify(location)}
+                  center={[location.lat, location.lng]}
+                  zoom={13}
+                  style={{
+                    height: "250px",
+                    width: "100%",
+                    borderRadius: "8px",
+                    zIndex: 0,
+                  }}
+                >
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <DraggableMarker
+                    onPositionChange={(newPos) => setLocation(newPos)}
+                    initialPosition={location}
+                  />
+                </MapContainer>
+              </div>
+            </div>
+            <div className="submit-button-container">
+              <button
+                className="auth-button"
+                type="submit"
+                disabled={loading}
+                style={{ width: "100%", maxWidth: "300px" }}
               >
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <DraggableMarker
-                  onPositionChange={(newPos) => setLocation(newPos)}
-                  initialPosition={location}
-                />
-              </MapContainer>
+                {loading ? "Menyimpan..." : "Simpan Perubahan"}
+              </button>
             </div>
           </div>
-          <div className="submit-button-container">
-            <button
-              className="auth-button"
-              type="submit"
-              disabled={loading}
-              style={{ width: "100%", maxWidth: "300px" }}
-            >
-              {loading ? "Menyimpan..." : "Simpan Perubahan"}
-            </button>
-          </div>
+        </form>
+        <div className="submit-button-container">
+          <button onClick={handleLogout} className="btn-logout">
+            Keluar dari Akun (Logout)
+          </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

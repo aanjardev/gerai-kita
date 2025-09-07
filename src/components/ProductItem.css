@@ -1,59 +1,83 @@
+/* src/components/ProductItem.css */
+
 .product-item-card {
+  display: flex; /* Menggunakan flexbox untuk layout horizontal */
+  align-items: center; /* Membuat semua item sejajar di tengah secara vertikal */
+  gap: 15px; /* Jarak antara gambar dan info */
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  overflow: hidden;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
+  padding: 15px;
+  transition: box-shadow 0.2s;
+}
+
+.product-item-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .product-item-image {
-  width: 100%;
-  height: 180px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0; /* Mencegah gambar menyusut */
 }
 
 .product-item-info {
-  padding: 15px;
-  flex-grow: 1;
+  flex-grow: 1; /* Membuat bagian info mengambil sisa ruang */
   display: flex;
-  flex-direction: column;
+  justify-content: space-between; /* Mendorong tombol aksi ke kanan */
+  align-items: center;
+  gap: 15px;
+}
+
+.product-item-details {
+  /* Tidak perlu style khusus, biarkan default */
 }
 
 .product-item-name {
   margin: 0 0 5px 0;
   font-size: 16px;
   font-weight: 600;
-}
-
-.product-item-price {
-  margin: 0 0 15px 0;
-  color: var(--primary-green);
-  font-weight: bold;
-}
-
-.product-item-actions {
-  margin-top: auto;
-  display: flex;
-  gap: 10px;
-}
-
-.btn {
-  flex-grow: 1;
-  padding: 8px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.btn-edit {
-  background-color: #f0f0f0;
   color: #333;
 }
 
-.btn-delete {
-  background-color: #ffebee;
+.product-item-price {
+  margin: 0;
+  color: var(--primary-green);
+  font-weight: 500;
+}
+
+.product-item-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; /* Mencegah tombol menyusut */
+}
+
+/* Style untuk tombol ikon */
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.icon-btn.btn-edit {
+  color: #555;
+}
+.icon-btn.btn-edit:hover {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+.icon-btn.btn-delete {
   color: #dc3545;
+}
+.icon-btn.btn-delete:hover {
+  background-color: #ffebee;
 }

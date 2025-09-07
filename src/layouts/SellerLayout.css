@@ -7,11 +7,13 @@
 .seller-content {
   flex-grow: 1;
   padding: 20px;
-  padding-bottom: 80px; /* Beri ruang agar tidak tertutup bottom nav */
+  padding-bottom: 80px; /* Ruang untuk bottom nav */
+  padding-top: 80px;  /* <-- TAMBAHKAN INI: 60px (tinggi header) + 20px (jarak) */
 }
 
 @media (min-width: 768px) {
   .seller-content {
-    padding-bottom: 20px; /* Kembalikan padding normal di desktop */
+    padding-bottom: 20px;
+    padding-top: 20px; /* <-- KEMBALIKAN PADDING NORMAL DI DESKTOP */
   }
 }
